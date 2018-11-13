@@ -11,16 +11,15 @@
             <tr>
                 <th>ID</th>
                 <th>Nome</th>
-                <th>Telefone</th>
             </tr>
         </thead>
         <tbody>
-
+        {%  for pessoa in lista_pessoas %}
             <tr>
-                <td>1</td>
-                <td>Victor</td>
+                <td>{{ pessoa.idPessoa }}</td>
+                <td>{{ pessoa.nome }}</td>
             </tr>
-
+        {%  endfor %}
         </tbody>
 
 
