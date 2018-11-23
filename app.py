@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 from sqlalchemy import create_engine
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import sessionmaker
@@ -22,12 +22,36 @@ Telefones = Base.classes.Telefones
 
 @app.route('/listar')
 def listar_pessoas():
-    sessionSQL= Session()
-    pessoas = sessionSQL.query(Pessoa).all()
-    sessionSQL.close()
+    id = str(request.args.get('id'))
+    sessionSQL = Session()
 
-    return render_template('listar.html',lista_pessoas = pessoas)
+    if id == 'None':
+        pessoas = sessionSQL.query(Pessoa).all()
+        sessionSQL.close()
+        return render_template('listar.html',lista_pessoas = pessoas)
+    else:
+        pessoa = sessionSQL.query(Pessoa).filter(Pessoa.idPessoa == id).first()
+        sessionSQL.delete(pessoa)
+        sessionSQL.commit()
+        sessionSQL.close()
+        return redirect(url_for('listar_pessoas'))
 
+
+@app.route('/inserir',methods=['GET','POST'])
+def inserir():
+    if request.method == 'GET':
+        return render_template('inserir.html')
+    else:
+        sessionSQL = Session()
+        nome = request.form['nome']
+
+        pessoa = Pessoa()
+        pessoa.nome = nome
+
+        sessionSQL.add(pessoa)
+        sessionSQL.commit()
+        sessionSQL.close()
+        return redirect(url_for('listar_pessoas'))
 
 @app.route('/index')
 @app.route('/')

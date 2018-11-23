@@ -18,6 +18,8 @@
             <tr>
                 <td>{{ pessoa.idPessoa }}</td>
                 <td>{{ pessoa.nome }}</td>
+                <td><a href="/editar?id={{ pessoa.idPessoa }}">Editar</a></td>
+                <td><a href="/listar?id={{ pessoa.idPessoa }}">Excluir</a></td>
             </tr>
         {%  endfor %}
         </tbody>
